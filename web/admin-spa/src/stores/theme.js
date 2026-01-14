@@ -42,8 +42,8 @@ export const useThemeStore = defineStore('theme', () => {
     if (savedMode && Object.values(ThemeMode).includes(savedMode)) {
       themeMode.value = savedMode
     } else {
-      // 默认使用 auto 模式
-      themeMode.value = ThemeMode.AUTO
+      // 默认使用 dark 模式 (Linear style)
+      themeMode.value = ThemeMode.DARK
     }
 
     // 应用主题

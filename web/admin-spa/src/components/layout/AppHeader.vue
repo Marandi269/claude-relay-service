@@ -1,268 +1,203 @@
 <template>
-  <!-- 顶部导航 -->
-  <div
-    class="glass-strong mb-4 rounded-xl p-3 shadow-xl sm:mb-6 sm:rounded-2xl sm:p-4 md:mb-8 md:rounded-3xl md:p-6"
-    style="z-index: 10; position: relative"
-  >
-    <div class="flex flex-col items-center justify-between gap-3 sm:flex-row sm:gap-4">
-      <div
-        class="flex w-full items-center justify-center gap-2 sm:w-auto sm:justify-start sm:gap-3 md:gap-4"
-      >
+  <!-- 顶部导航 - Linear style -->
+  <header class="header-container">
+    <div class="header-content">
+      <!-- Logo and Title -->
+      <div class="header-left">
         <LogoTitle
           :loading="oemLoading"
           :logo-src="oemSettings.siteIconData || oemSettings.siteIcon"
           subtitle="管理后台"
           :title="oemSettings.siteName"
-          title-class="text-white dark:text-gray-100"
+          title-class="header-title"
         >
           <template #after-title>
             <!-- 版本信息 -->
-            <div class="flex items-center gap-1 sm:gap-2">
-              <span class="font-mono text-xs text-gray-400 dark:text-gray-500 sm:text-sm"
-                >v{{ versionInfo.current || '...' }}</span
-              >
+            <div class="version-info">
+              <span class="version-number">v{{ versionInfo.current || '...' }}</span>
               <!-- 更新提示 -->
               <a
                 v-if="versionInfo.hasUpdate"
-                class="inline-flex animate-pulse items-center gap-1 rounded-full border border-green-600 bg-green-500 px-2 py-0.5 text-xs text-white transition-colors hover:bg-green-600"
+                class="update-badge"
                 :href="versionInfo.releaseInfo?.htmlUrl || '#'"
                 target="_blank"
                 title="有新版本可用"
               >
-                <i class="fas fa-arrow-up text-[10px]" />
+                <i class="fas fa-arrow-up" />
                 <span>新版本</span>
               </a>
             </div>
           </template>
         </LogoTitle>
       </div>
-      <!-- 主题切换和用户菜单 -->
-      <div class="flex items-center gap-2 sm:gap-4">
+
+      <!-- Right side: Theme toggle and User menu -->
+      <div class="header-right">
         <!-- 主题切换按钮 -->
-        <div class="flex items-center">
-          <ThemeToggle mode="dropdown" />
-        </div>
+        <ThemeToggle mode="dropdown" />
 
         <!-- 分隔线 -->
-        <div
-          class="h-8 w-px bg-gradient-to-b from-transparent via-gray-300 to-transparent opacity-50 dark:via-gray-600"
-        />
+        <div class="header-divider" />
 
         <!-- 用户菜单 -->
-        <div class="user-menu-container relative">
-          <button
-            class="user-menu-button flex items-center gap-2 rounded-2xl bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95 sm:px-4 sm:py-2.5"
-            @click="userMenuOpen = !userMenuOpen"
-          >
-            <i class="fas fa-user-circle text-sm sm:text-base" />
-            <span class="hidden sm:inline">{{ currentUser.username || 'Admin' }}</span>
+        <div class="user-menu-container">
+          <button class="user-menu-trigger" @click="userMenuOpen = !userMenuOpen">
+            <div class="user-avatar">
+              <i class="fas fa-user" />
+            </div>
+            <span class="user-name">{{ currentUser.username || 'Admin' }}</span>
             <i
-              class="fas fa-chevron-down ml-1 text-xs transition-transform duration-200"
-              :class="{ 'rotate-180': userMenuOpen }"
+              class="fas fa-chevron-down chevron-icon"
+              :class="{ 'chevron-rotate': userMenuOpen }"
             />
           </button>
 
           <!-- 悬浮菜单 -->
-          <div
-            v-if="userMenuOpen"
-            class="user-menu-dropdown absolute right-0 top-full mt-2 w-48 rounded-xl border border-gray-200 bg-white py-2 shadow-xl dark:border-gray-700 dark:bg-gray-800 sm:w-56"
-            style="z-index: 999999"
-            @click.stop
-          >
-            <!-- 版本信息 -->
-            <div class="border-b border-gray-100 px-4 py-3 dark:border-gray-700">
-              <div class="flex items-center justify-between text-sm">
-                <span class="text-gray-500 dark:text-gray-400">当前版本</span>
-                <span class="font-mono text-gray-700 dark:text-gray-300"
-                  >v{{ versionInfo.current || '...' }}</span
-                >
-              </div>
-              <div v-if="versionInfo.hasUpdate" class="mt-2">
-                <div class="mb-2 flex items-center justify-between text-sm">
-                  <span class="font-medium text-green-600 dark:text-green-400">
-                    <i class="fas fa-arrow-up mr-1" />有新版本
-                  </span>
-                  <span class="font-mono text-green-600 dark:text-green-400"
-                    >v{{ versionInfo.latest }}</span
-                  >
+          <Transition name="dropdown">
+            <div v-if="userMenuOpen" class="user-dropdown" @click.stop>
+              <!-- 版本信息 -->
+              <div class="dropdown-section">
+                <div class="version-row">
+                  <span class="version-label">当前版本</span>
+                  <span class="version-value">v{{ versionInfo.current || '...' }}</span>
                 </div>
-                <a
-                  class="block w-full rounded-lg bg-green-500 px-3 py-1.5 text-center text-sm text-white transition-colors hover:bg-green-600"
-                  :href="versionInfo.releaseInfo?.htmlUrl || '#'"
-                  target="_blank"
-                >
-                  <i class="fas fa-external-link-alt mr-1" />查看更新
-                </a>
-              </div>
-              <div
-                v-else-if="versionInfo.checkingUpdate"
-                class="mt-2 text-center text-xs text-gray-500 dark:text-gray-400"
-              >
-                <i class="fas fa-spinner fa-spin mr-1" />检查更新中...
-              </div>
-              <div v-else class="mt-2 text-center">
-                <!-- 已是最新版提醒 -->
-                <transition mode="out-in" name="fade">
-                  <div
-                    v-if="versionInfo.noUpdateMessage"
-                    key="message"
-                    class="inline-block rounded-lg border border-green-200 bg-green-100 px-3 py-1.5 dark:border-green-800 dark:bg-green-900/30"
-                  >
-                    <p class="text-xs font-medium text-green-700 dark:text-green-400">
-                      <i class="fas fa-check-circle mr-1" />当前已是最新版本
-                    </p>
+                <div v-if="versionInfo.hasUpdate" class="update-section">
+                  <div class="update-row">
+                    <span class="update-label"> <i class="fas fa-arrow-up" />有新版本 </span>
+                    <span class="update-value">v{{ versionInfo.latest }}</span>
                   </div>
-                  <button
-                    v-else
-                    key="button"
-                    class="text-xs text-blue-500 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                    @click="checkForUpdates()"
+                  <a
+                    class="update-link"
+                    :href="versionInfo.releaseInfo?.htmlUrl || '#'"
+                    target="_blank"
                   >
-                    <i class="fas fa-sync-alt mr-1" />检查更新
-                  </button>
-                </transition>
+                    <i class="fas fa-external-link-alt" />查看更新
+                  </a>
+                </div>
+                <div v-else-if="versionInfo.checkingUpdate" class="checking-update">
+                  <i class="fas fa-spinner fa-spin" />检查更新中...
+                </div>
+                <div v-else class="check-update-section">
+                  <Transition mode="out-in" name="fade">
+                    <div v-if="versionInfo.noUpdateMessage" key="message" class="no-update-badge">
+                      <i class="fas fa-check-circle" />当前已是最新版本
+                    </div>
+                    <button v-else key="button" class="check-update-btn" @click="checkForUpdates()">
+                      <i class="fas fa-sync-alt" />检查更新
+                    </button>
+                  </Transition>
+                </div>
               </div>
+
+              <div class="dropdown-divider" />
+
+              <button class="dropdown-item" @click="openChangePasswordModal">
+                <i class="fas fa-key item-icon" />
+                <span>修改账户信息</span>
+              </button>
+
+              <div class="dropdown-divider" />
+
+              <button class="dropdown-item dropdown-item-danger" @click="logout">
+                <i class="fas fa-sign-out-alt item-icon" />
+                <span>退出登录</span>
+              </button>
             </div>
-
-            <button
-              class="flex w-full items-center gap-3 px-4 py-3 text-left text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
-              @click="openChangePasswordModal"
-            >
-              <i class="fas fa-key text-blue-500" />
-              <span>修改账户信息</span>
-            </button>
-
-            <hr class="my-2 border-gray-200 dark:border-gray-700" />
-
-            <button
-              class="flex w-full items-center gap-3 px-4 py-3 text-left text-gray-700 transition-colors hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
-              @click="logout"
-            >
-              <i class="fas fa-sign-out-alt text-red-500" />
-              <span>退出登录</span>
-            </button>
-          </div>
+          </Transition>
         </div>
       </div>
     </div>
-  </div>
+  </header>
 
   <!-- 修改账户信息模态框 -->
-  <div
-    v-if="showChangePasswordModal"
-    class="modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4"
-  >
-    <div class="modal-content mx-auto flex max-h-[90vh] w-full max-w-md flex-col p-4 sm:p-6 md:p-8">
-      <div class="mb-6 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div
-            class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600"
-          >
-            <i class="fas fa-key text-white" />
+  <Teleport to="body">
+    <Transition name="modal">
+      <div v-if="showChangePasswordModal" class="modal-overlay" @click="closeChangePasswordModal">
+        <div class="modal-container" @click.stop>
+          <div class="modal-header">
+            <div class="modal-title-group">
+              <div class="modal-icon">
+                <i class="fas fa-key" />
+              </div>
+              <h3 class="modal-title">修改账户信息</h3>
+            </div>
+            <button class="modal-close" @click="closeChangePasswordModal">
+              <i class="fas fa-times" />
+            </button>
           </div>
-          <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">修改账户信息</h3>
+
+          <form class="modal-body" @submit.prevent="changePassword">
+            <div class="form-group">
+              <label class="form-label">当前用户名</label>
+              <input
+                class="form-input disabled"
+                disabled
+                type="text"
+                :value="currentUser.username || 'Admin'"
+              />
+              <p class="form-hint">当前用户名，输入新用户名以修改</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">新用户名</label>
+              <input
+                v-model="changePasswordForm.newUsername"
+                class="form-input"
+                placeholder="输入新用户名（留空保持不变）"
+                type="text"
+              />
+              <p class="form-hint">留空表示不修改用户名</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">当前密码</label>
+              <input
+                v-model="changePasswordForm.currentPassword"
+                class="form-input"
+                placeholder="请输入当前密码"
+                required
+                type="password"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">新密码</label>
+              <input
+                v-model="changePasswordForm.newPassword"
+                class="form-input"
+                placeholder="请输入新密码"
+                required
+                type="password"
+              />
+              <p class="form-hint">密码长度至少8位</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">确认新密码</label>
+              <input
+                v-model="changePasswordForm.confirmPassword"
+                class="form-input"
+                placeholder="请再次输入新密码"
+                required
+                type="password"
+              />
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" @click="closeChangePasswordModal">
+                取消
+              </button>
+              <button class="btn btn-primary" :disabled="changePasswordLoading" type="submit">
+                <span v-if="changePasswordLoading" class="loading-spinner" />
+                <i v-else class="fas fa-save" />
+                {{ changePasswordLoading ? '保存中...' : '保存修改' }}
+              </button>
+            </div>
+          </form>
         </div>
-        <button
-          class="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300"
-          @click="closeChangePasswordModal"
-        >
-          <i class="fas fa-times text-xl" />
-        </button>
       </div>
-
-      <form
-        class="modal-scroll-content custom-scrollbar flex-1 space-y-6"
-        @submit.prevent="changePassword"
-      >
-        <div>
-          <label class="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300"
-            >当前用户名</label
-          >
-          <input
-            class="form-input w-full cursor-not-allowed bg-gray-100 dark:bg-gray-700 dark:text-gray-300"
-            disabled
-            type="text"
-            :value="currentUser.username || 'Admin'"
-          />
-          <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
-            当前用户名，输入新用户名以修改
-          </p>
-        </div>
-
-        <div>
-          <label class="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300"
-            >新用户名</label
-          >
-          <input
-            v-model="changePasswordForm.newUsername"
-            class="form-input w-full"
-            placeholder="输入新用户名（留空保持不变）"
-            type="text"
-          />
-          <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">留空表示不修改用户名</p>
-        </div>
-
-        <div>
-          <label class="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300"
-            >当前密码</label
-          >
-          <input
-            v-model="changePasswordForm.currentPassword"
-            class="form-input w-full"
-            placeholder="请输入当前密码"
-            required
-            type="password"
-          />
-        </div>
-
-        <div>
-          <label class="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300"
-            >新密码</label
-          >
-          <input
-            v-model="changePasswordForm.newPassword"
-            class="form-input w-full"
-            placeholder="请输入新密码"
-            required
-            type="password"
-          />
-          <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">密码长度至少8位</p>
-        </div>
-
-        <div>
-          <label class="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300"
-            >确认新密码</label
-          >
-          <input
-            v-model="changePasswordForm.confirmPassword"
-            class="form-input w-full"
-            placeholder="请再次输入新密码"
-            required
-            type="password"
-          />
-        </div>
-
-        <div class="flex gap-3 pt-4">
-          <button
-            class="flex-1 rounded-xl bg-gray-100 px-6 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-            type="button"
-            @click="closeChangePasswordModal"
-          >
-            取消
-          </button>
-          <button
-            class="btn btn-primary flex-1 px-6 py-3 font-semibold"
-            :disabled="changePasswordLoading"
-            type="submit"
-          >
-            <div v-if="changePasswordLoading" class="loading-spinner mr-2" />
-            <i v-else class="fas fa-save mr-2" />
-            {{ changePasswordLoading ? '保存中...' : '保存修改' }}
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup>
@@ -460,53 +395,482 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* 用户菜单按钮样式 */
-.user-menu-button {
-  position: relative;
-  overflow: hidden;
-  min-height: 38px;
-}
-
-/* 添加光泽效果 */
-.user-menu-button::before {
-  content: '';
-  position: absolute;
+/* Header Container - Linear style */
+.header-container {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-default);
+  padding: 12px 20px;
+  position: sticky;
   top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
+  z-index: 100;
 }
 
-.user-menu-button:hover::before {
-  left: 100%;
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-/* 用户菜单样式优化 */
-.user-menu-dropdown {
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-title {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* Version Info */
+.version-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.version-number {
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.update-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--success);
+  background: var(--success-bg);
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.1s ease;
+}
+
+.update-badge:hover {
+  filter: brightness(1.1);
+}
+
+.update-badge i {
+  font-size: 9px;
+}
+
+/* Header Divider */
+.header-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-default);
+}
+
+/* User Menu */
+.user-menu-container {
+  position: relative;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.user-menu-trigger:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
+
+.user-avatar {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  color: white;
+  font-size: 11px;
+}
+
+.user-name {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .user-name {
+    display: inline;
+  }
+}
+
+.chevron-icon {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  transition: transform 0.15s ease;
+}
+
+.chevron-rotate {
+  transform: rotate(180deg);
+}
+
+/* User Dropdown */
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 220px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.dropdown-section {
+  padding: 12px 16px;
+}
+
+.version-row,
+.update-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.version-label {
+  color: var(--text-secondary);
+}
+
+.version-value {
+  font-family: 'SF Mono', Monaco, monospace;
+  color: var(--text-primary);
+}
+
+.update-section {
+  margin-top: 12px;
+}
+
+.update-label {
+  color: var(--success);
+  font-weight: 500;
+}
+
+.update-label i {
+  margin-right: 4px;
+}
+
+.update-value {
+  font-family: 'SF Mono', Monaco, monospace;
+  color: var(--success);
+}
+
+.update-link {
+  display: block;
   margin-top: 8px;
-  animation: slideDown 0.3s ease-out;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  background: var(--success);
+  border-radius: var(--radius-md);
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.1s ease;
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.update-link:hover {
+  filter: brightness(1.1);
 }
 
-/* fade过渡动画 */
+.update-link i {
+  margin-right: 4px;
+}
+
+.checking-update {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.checking-update i {
+  margin-right: 4px;
+}
+
+.check-update-section {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.check-update-btn {
+  font-size: 12px;
+  color: var(--accent-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.1s ease;
+}
+
+.check-update-btn:hover {
+  color: var(--accent-primary-hover);
+}
+
+.check-update-btn i {
+  margin-right: 4px;
+}
+
+.no-update-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--success);
+  background: var(--success-bg);
+  border-radius: var(--radius-md);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-default);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.1s ease;
+}
+
+.dropdown-item:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.dropdown-item-danger {
+  color: var(--error);
+}
+
+.dropdown-item-danger:hover {
+  background: var(--error-bg);
+}
+
+.item-icon {
+  width: 14px;
+  text-align: center;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--modal-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-primary);
+  border-radius: var(--radius-md);
+  color: white;
+  font-size: 14px;
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.modal-close:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.modal-body {
+  padding: 24px;
+  max-height: calc(90vh - 180px);
+  overflow-y: auto;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 8px;
+  padding-top: 20px;
+  margin-top: 8px;
+  border-top: 1px solid var(--border-default);
+}
+
+.modal-footer .btn {
+  flex: 1;
+  justify-content: center;
+}
+
+/* Form elements */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--input-bg);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  transition: all 0.1s ease;
+}
+
+.form-input:hover {
+  border-color: var(--border-strong);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.15);
+}
+
+.form-input.disabled {
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+
+.form-hint {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
+/* Transitions */
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 0.15s ease;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.2s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-from .modal-container,
+.modal-leave-to .modal-container {
+  transform: scale(0.95);
+}
+
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s;
+  transition: opacity 0.15s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .header-container {
+    padding: 10px 12px;
+  }
+
+  .user-dropdown {
+    min-width: 200px;
+  }
 }
 </style>

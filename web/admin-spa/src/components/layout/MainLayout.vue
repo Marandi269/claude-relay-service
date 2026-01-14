@@ -1,21 +1,18 @@
 <template>
-  <div class="min-h-screen p-3 sm:p-4 md:p-6">
+  <div class="main-layout">
     <!-- 顶部导航 -->
     <AppHeader />
 
     <!-- 主内容区域 -->
-    <div
-      class="glass-strong rounded-xl p-3 shadow-xl sm:rounded-2xl sm:p-4 md:rounded-3xl md:p-6"
-      style="z-index: 1; min-height: calc(100vh - 120px)"
-    >
+    <main class="main-content">
       <!-- 标签栏 -->
       <TabBar :active-tab="activeTab" @tab-change="handleTabChange" />
 
       <!-- 内容区域 -->
-      <div class="tab-content">
+      <div class="content-area">
         <router-view />
       </div>
-    </div>
+    </main>
   </div>
 </template>
 
@@ -135,5 +132,43 @@ const handleTabChange = async (tabKey) => {
 </script>
 
 <style scoped>
-/* 使用全局定义的过渡样式 */
+/* Linear-style Main Layout */
+.main-layout {
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.content-area {
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .main-content {
+    padding: 8px;
+  }
+}
 </style>

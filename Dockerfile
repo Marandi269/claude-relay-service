@@ -1,6 +1,9 @@
 # 🎯 后端依赖阶段 (与前端构建并行)
 FROM node:18-alpine AS backend-deps
 
+# 🔧 安装编译依赖 (heapdump等原生模块需要)
+RUN apk add --no-cache python3 make g++
+
 # 📁 设置工作目录
 WORKDIR /app
 
