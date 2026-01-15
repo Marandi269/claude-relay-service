@@ -158,65 +158,26 @@ const hasValidInput = computed(() => {
 </script>
 
 <style scoped>
-/* 宽卡片样式 - 使用CSS变量 */
+/* Linear-style 卡片 */
 .api-input-wide-card {
-  background: var(--surface-color);
-  backdrop-filter: blur(25px);
-  border: 1px solid var(--border-color);
-  box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* 暗夜模式宽卡片样式 */
-:global(.dark) .api-input-wide-card {
-  box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(75, 85, 99, 0.2),
-    inset 0 1px 0 rgba(107, 114, 128, 0.15);
-}
-
-.api-input-wide-card:hover {
-  box-shadow:
-    0 32px 64px -12px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
-}
-
-:global(.dark) .api-input-wide-card:hover {
-  box-shadow:
-    0 32px 64px -12px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(75, 85, 99, 0.25),
-    inset 0 1px 0 rgba(107, 114, 128, 0.3) !important;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  transition: all 0.15s ease;
 }
 
 /* 标题样式 */
 .wide-card-title h2 {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  font-weight: 700;
-}
-
-:global(.dark) .wide-card-title h2 {
-  color: #f9fafb;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .wide-card-title p {
-  color: #6b7280;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-}
-
-:global(.dark) .wide-card-title p {
-  color: #9ca3af;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  color: var(--text-secondary);
 }
 
 .wide-card-title .fas.fa-chart-line {
-  color: #3b82f6;
-  text-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
+  color: var(--accent-primary);
 }
 
 /* 网格布局 */
@@ -225,133 +186,77 @@ const hasValidInput = computed(() => {
   gap: 1rem;
 }
 
-/* 输入框样式 - 使用CSS变量 */
+/* Linear-style 输入框 */
 .wide-card-input {
-  background: var(--input-bg);
-  border: 2px solid var(--input-border);
-  border-radius: 12px;
-  padding: 14px 16px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  font-size: 14px;
   color: var(--text-primary);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-:global(.dark) .wide-card-input {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  color: #e5e7eb;
+  transition: all 0.15s ease;
 }
 
 .wide-card-input::placeholder {
-  color: #9ca3af;
+  color: var(--text-tertiary);
 }
 
-:global(.dark) .wide-card-input::placeholder {
-  color: #64748b;
+.wide-card-input:hover {
+  border-color: var(--border-strong);
 }
 
 .wide-card-input:focus {
   outline: none;
-  border-color: #60a5fa;
-  box-shadow:
-    0 0 0 3px rgba(96, 165, 250, 0.2),
-    0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  background: white;
-  color: #1f2937;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-:global(.dark) .wide-card-input:focus {
-  border-color: #60a5fa;
-  box-shadow:
-    0 0 0 3px rgba(96, 165, 250, 0.15),
-    0 10px 15px -3px rgba(0, 0, 0, 0.4);
-  background: rgba(31, 41, 55, 0.95);
-  color: #f3f4f6;
-}
-
-/* 按钮样式 */
+/* Linear-style 按钮 */
 .btn {
   font-weight: 500;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  letter-spacing: 0.025em;
+  transition: all 0.15s ease;
 }
 
-/* 查询按钮特定样式 */
 .btn-query {
-  padding: 14px 24px;
-  font-size: 16px;
+  padding: 12px 20px;
+  font-size: 14px;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--accent-primary);
   color: white;
-  box-shadow:
-    0 10px 15px -3px rgba(102, 126, 234, 0.3),
-    0 4px 6px -2px rgba(102, 126, 234, 0.05);
 }
 
 .btn-primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow:
-    0 20px 25px -5px rgba(102, 126, 234, 0.3),
-    0 10px 10px -5px rgba(102, 126, 234, 0.1);
+  background: var(--accent-primary-hover);
 }
 
 .btn-primary:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
 }
 
-/* 安全提示样式 */
+/* 安全提示 - Linear style */
 .security-notice {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
-  padding: 12px 16px;
-  color: #374151;
-  font-size: 0.875rem;
-  transition: all 0.3s ease;
-}
-
-:global(.dark) .security-notice {
-  background: rgba(31, 41, 55, 0.8) !important;
-  border: 1px solid rgba(75, 85, 99, 0.5) !important;
-  color: #d1d5db !important;
-}
-
-.security-notice:hover {
-  background: rgba(255, 255, 255, 0.6);
-  border-color: rgba(255, 255, 255, 0.5);
-  color: #1f2937;
-}
-
-:global(.dark) .security-notice:hover {
-  background: rgba(31, 41, 55, 0.9) !important;
-  border-color: rgba(75, 85, 99, 0.6) !important;
-  color: #e5e7eb !important;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
 }
 
 .security-notice .fas.fa-shield-alt {
-  color: #10b981;
-  text-shadow: 0 1px 2px rgba(16, 185, 129, 0.2);
+  color: var(--success);
 }
 
 /* 控制栏 */
 .control-bar {
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(229, 231, 235, 0.3);
-}
-
-:global(.dark) .control-bar {
-  border-bottom-color: rgba(75, 85, 99, 0.3);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-default);
 }
 
 /* 按钮组 */
@@ -361,18 +266,13 @@ const hasValidInput = computed(() => {
   gap: 0.5rem;
 }
 
-/* 模式切换组 */
+/* 模式切换组 - Linear style */
 .mode-switch-group {
   display: inline-flex;
-  padding: 4px;
-  background: #f3f4f6;
-  border-radius: 0.5rem;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-:global(.dark) .mode-switch-group {
-  background: #1f2937;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  padding: 3px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
 }
 
 /* 模式切换按钮 */
@@ -380,70 +280,39 @@ const hasValidInput = computed(() => {
   display: inline-flex;
   align-items: center;
   padding: 6px 12px;
-  font-size: 0.875rem;
+  font-size: 13px;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--text-secondary);
   background: transparent;
   border: none;
-  border-radius: 0.375rem;
+  border-radius: calc(var(--radius-md) - 2px);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   white-space: nowrap;
 }
 
-:global(.dark) .mode-switch-btn {
-  color: #9ca3af;
-}
-
 .mode-switch-btn:hover:not(.active) {
-  color: #374151;
-  background: rgba(0, 0, 0, 0.05);
-}
-
-:global(.dark) .mode-switch-btn:hover:not(.active) {
-  color: #d1d5db;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 
 .mode-switch-btn.active {
   color: white;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
-}
-
-.mode-switch-btn.active:hover {
-  box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+  background: var(--accent-primary);
 }
 
 .mode-switch-btn i {
-  font-size: 0.875rem;
-}
-
-/* 淡入淡出动画 */
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateX(-10px);
+  font-size: 0.8rem;
 }
 
 /* 加载动画 */
 .loading-spinner {
   animation: spin 1s linear infinite;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* 响应式优化 */
@@ -451,70 +320,15 @@ const hasValidInput = computed(() => {
   .control-bar {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .button-group {
     justify-content: center;
   }
-}
 
-@media (max-width: 768px) {
   .api-input-wide-card {
     padding: 1.25rem;
-  }
-
-  .wide-card-title {
-    margin-bottom: 1.25rem;
-  }
-
-  .wide-card-title h2 {
-    font-size: 1.5rem;
-  }
-
-  .wide-card-title p {
-    font-size: 0.875rem;
-  }
-
-  .api-input-grid {
-    gap: 1rem;
-  }
-
-  .wide-card-input {
-    padding: 12px 14px;
-    font-size: 15px;
-  }
-
-  .btn-query {
-    padding: 12px 20px;
-    font-size: 15px;
-  }
-
-  .security-notice {
-    padding: 10px 14px;
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .mode-toggle-btn {
-    padding: 5px 8px;
-  }
-
-  .toggle-icon {
-    width: 18px;
-    height: 18px;
-  }
-
-  .hint-text {
-    font-size: 0.7rem;
-    padding: 4px 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .api-input-wide-card {
-    padding: 1rem;
   }
 
   .wide-card-title h2 {
@@ -524,15 +338,25 @@ const hasValidInput = computed(() => {
   .wide-card-title p {
     font-size: 0.8rem;
   }
+}
+
+@media (max-width: 480px) {
+  .api-input-wide-card {
+    padding: 1rem;
+  }
+
+  .wide-card-title h2 {
+    font-size: 1.1rem;
+  }
 
   .wide-card-input {
     padding: 10px 12px;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .btn-query {
     padding: 10px 16px;
-    font-size: 14px;
+    font-size: 13px;
   }
 }
 </style>
