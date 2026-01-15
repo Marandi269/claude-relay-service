@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen p-4 md:p-6" :class="isDarkMode ? 'gradient-bg-dark' : 'gradient-bg'">
+  <div class="api-stats-page min-h-screen p-4 md:p-6">
     <!-- 顶部导航 -->
     <div class="glass-strong mb-6 rounded-3xl p-4 shadow-xl md:mb-8 md:p-6">
       <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -46,9 +46,7 @@
     <!-- Tab 切换 -->
     <div class="mb-6 md:mb-8">
       <div class="flex justify-center">
-        <div
-          class="inline-flex w-full max-w-md rounded-full border border-white/20 bg-white/10 p-1 shadow-lg backdrop-blur-xl md:w-auto"
-        >
+        <div class="tab-container inline-flex w-full max-w-md rounded-full p-1 md:w-auto">
           <button
             :class="['tab-pill-button', currentTab === 'stats' ? 'active' : '']"
             @click="currentTab = 'stats'"
@@ -169,7 +167,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useApiStatsStore } from '@/stores/apistats'
@@ -191,9 +189,6 @@ const themeStore = useThemeStore()
 
 // 当前标签页
 const currentTab = ref('stats')
-
-// 主题相关
-const isDarkMode = computed(() => themeStore.isDarkMode)
 
 const {
   apiKey,
@@ -283,320 +278,111 @@ watch(apiKey, (newValue) => {
 </script>
 
 <style scoped>
-/* 渐变背景 */
-.gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  background-attachment: fixed;
+/* Linear-style page background */
+.api-stats-page {
+  background: var(--bg-primary);
   min-height: 100vh;
-  position: relative;
 }
 
-/* 暗色模式的渐变背景 */
-.gradient-bg-dark {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
-  background-attachment: fixed;
-  min-height: 100vh;
-  position: relative;
-}
-
-.gradient-bg::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(circle at 20% 80%, rgba(240, 147, 251, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(102, 126, 234, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* 暗色模式的背景覆盖 */
-.gradient-bg-dark::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(circle at 20% 80%, rgba(100, 116, 139, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(71, 85, 105, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(30, 41, 59, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* 玻璃态效果 - 使用CSS变量 */
+/* Linear-style card/panel */
 .glass-strong {
-  background: var(--glass-strong-color);
-  backdrop-filter: blur(25px);
-  border: 1px solid var(--border-color);
-  box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 1;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
-/* 暗色模式的玻璃态效果 */
-:global(.dark) .glass-strong {
-  box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(55, 65, 81, 0.3),
-    inset 0 1px 0 rgba(75, 85, 99, 0.2);
-}
-
-/* 标题渐变 */
-.header-title {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-}
-
-/* 用户登录按钮 */
+/* 用户登录按钮 - Linear style */
 .user-login-button {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  text-decoration: none;
-  box-shadow:
-    0 4px 12px rgba(52, 211, 153, 0.25),
-    inset 0 1px 1px rgba(255, 255, 255, 0.2);
-  position: relative;
-  overflow: hidden;
-  font-weight: 600;
-}
-
-/* 暗色模式下的用户登录按钮 */
-:global(.dark) .user-login-button {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-  border: 1px solid rgba(52, 211, 153, 0.4);
+  background: var(--success);
   color: white;
-  box-shadow:
-    0 4px 12px rgba(52, 211, 153, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.1);
-}
-
-.user-login-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.15s ease;
 }
 
 .user-login-button:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow:
-    0 8px 20px rgba(52, 211, 153, 0.35),
-    inset 0 1px 1px rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.4);
+  opacity: 0.9;
 }
 
-.user-login-button:hover::before {
-  opacity: 1;
-}
-
-/* 暗色模式下的悬停效果 */
-:global(.dark) .user-login-button:hover {
-  box-shadow:
-    0 8px 20px rgba(52, 211, 153, 0.4),
-    inset 0 1px 1px rgba(255, 255, 255, 0.2);
-  border-color: rgba(52, 211, 153, 0.5);
-}
-
-.user-login-button:active {
-  transform: translateY(-1px) scale(1);
-}
-
-/* 确保图标和文字在所有模式下都清晰可见 */
-.user-login-button i,
-.user-login-button span {
-  position: relative;
-  z-index: 1;
-}
-
-/* 管理后台按钮 - 精致版本 */
+/* 管理后台按钮 - Linear style */
 .admin-button-refined {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--accent-primary);
   color: white;
   text-decoration: none;
-  box-shadow:
-    0 4px 12px rgba(102, 126, 234, 0.25),
-    inset 0 1px 1px rgba(255, 255, 255, 0.2);
-  position: relative;
-  overflow: hidden;
-  font-weight: 600;
-}
-
-/* 暗色模式下的管理后台按钮 */
-:global(.dark) .admin-button-refined {
-  background: rgba(55, 65, 81, 0.8);
-  border: 1px solid rgba(107, 114, 128, 0.4);
-  color: #f3f4f6;
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.05);
-}
-
-.admin-button-refined::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  font-weight: 500;
+  transition: all 0.15s ease;
 }
 
 .admin-button-refined:hover {
-  transform: translateY(-2px) scale(1.02);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-  box-shadow:
-    0 8px 20px rgba(118, 75, 162, 0.35),
-    inset 0 1px 1px rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: white;
+  background: var(--accent-primary-hover);
 }
 
-.admin-button-refined:hover::before {
-  opacity: 1;
-}
-
-/* 暗色模式下的悬停效果 */
-:global(.dark) .admin-button-refined:hover {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: rgba(147, 51, 234, 0.4);
-  box-shadow:
-    0 8px 20px rgba(102, 126, 234, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-.admin-button-refined:active {
-  transform: translateY(-1px) scale(1);
-}
-
-/* 确保图标和文字在所有模式下都清晰可见 */
-.admin-button-refined i,
-.admin-button-refined span {
-  position: relative;
-  z-index: 1;
-}
-
-/* 时间范围按钮 */
+/* 时间范围按钮 - Linear style */
 .period-btn {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-weight: 500;
-  letter-spacing: 0.025em;
-  transition: all 0.3s ease;
-  border: none;
+  transition: all 0.15s ease;
+  border: 1px solid var(--border-default);
   cursor: pointer;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
 }
 
 .period-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--accent-primary);
   color: white;
-  box-shadow:
-    0 10px 15px -3px rgba(102, 126, 234, 0.3),
-    0 4px 6px -2px rgba(102, 126, 234, 0.05);
-  transform: translateY(-1px);
-}
-
-.period-btn:not(.active) {
-  color: #374151;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(229, 231, 235, 0.5);
-}
-
-:global(html.dark) .period-btn:not(.active) {
-  color: #e5e7eb;
-  background: rgba(55, 65, 81, 0.4);
-  border: 1px solid rgba(75, 85, 99, 0.5);
+  border-color: var(--accent-primary);
 }
 
 .period-btn:not(.active):hover {
-  background: rgba(255, 255, 255, 0.8);
-  color: #1f2937;
-  border-color: rgba(209, 213, 219, 0.8);
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
 }
 
-:global(html.dark) .period-btn:not(.active):hover {
-  background: rgba(75, 85, 99, 0.6);
-  color: #ffffff;
-  border-color: rgba(107, 114, 128, 0.8);
-}
-
-/* 测试按钮样式 */
+/* 测试按钮样式 - Linear style */
 .test-btn {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-weight: 500;
-  letter-spacing: 0.025em;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   border: none;
   cursor: pointer;
-  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  background: var(--info);
   color: white;
-  box-shadow:
-    0 4px 10px -2px rgba(6, 182, 212, 0.3),
-    0 2px 4px -1px rgba(6, 182, 212, 0.1);
 }
 
 .test-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow:
-    0 8px 15px -3px rgba(6, 182, 212, 0.4),
-    0 4px 6px -2px rgba(6, 182, 212, 0.15);
+  opacity: 0.9;
 }
 
 .test-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
 }
 
-/* Tab 胶囊按钮样式 */
+/* Tab 容器 - Linear style */
+.tab-container {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-default);
+}
+
+/* Tab 胶囊按钮样式 - Linear style */
 .tab-pill-button {
   padding: 0.5rem 1rem;
   border-radius: 9999px;
   font-weight: 500;
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
+  transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
   flex: 1;
   justify-content: center;
-}
-
-/* 暗夜模式下的Tab按钮基础样式 */
-:global(html.dark) .tab-pill-button {
-  color: rgba(209, 213, 219, 0.8);
 }
 
 @media (min-width: 768px) {
@@ -607,29 +393,13 @@ watch(apiKey, (newValue) => {
 }
 
 .tab-pill-button:hover {
-  color: white;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-:global(html.dark) .tab-pill-button:hover {
-  color: #f3f4f6;
-  background: rgba(100, 116, 139, 0.2);
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 
 .tab-pill-button.active {
-  background: white;
-  color: #764ba2;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-:global(html.dark) .tab-pill-button.active {
-  background: rgba(71, 85, 105, 0.9);
-  color: #f3f4f6;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.3),
-    0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  background: var(--accent-primary);
+  color: white;
 }
 
 .tab-pill-button i {
@@ -638,13 +408,13 @@ watch(apiKey, (newValue) => {
 
 /* Tab 内容切换动画 */
 .tab-content {
-  animation: tabFadeIn 0.4s ease-out;
+  animation: tabFadeIn 0.3s ease-out;
 }
 
 @keyframes tabFadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -654,13 +424,13 @@ watch(apiKey, (newValue) => {
 
 /* 动画效果 */
 .fade-in {
-  animation: fadeIn 0.6s ease-out;
+  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
