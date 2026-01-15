@@ -90,6 +90,74 @@
   --input-bg: var(--bg-primary);
   --modal-bg: rgba(0, 0, 0, 0.4);
   --table-bg: var(--bg-elevated);
+
+  /* Light mode status colors - slightly darker for contrast */
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --warning: #eab308;
+  --warning-bg: rgba(234, 179, 8, 0.12);
+  --error: #ef4444;
+  --error-bg: rgba(239, 68, 68, 0.12);
+  --info: #3b82f6;
+  --info-bg: rgba(59, 130, 246, 0.12);
+}
+
+/* Light mode button overrides - use dark overlay instead of white */
+.light .btn-secondary {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.light .btn-secondary:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+.light .btn-secondary:active:not(:disabled) {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.light .btn-ghost:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.light .btn-ghost:active:not(:disabled) {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.light .btn-outline:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.light .btn-icon:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Light mode table and card hover */
+.light .table-row:hover,
+.light .table tr:hover td {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Light mode success/danger buttons - adjust opacity */
+.light .btn-success {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.light .btn-success:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.18);
+}
+
+.light .btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.15);
+}
+
+.light .btn-danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.15);
 }
 
 /* Base styles */

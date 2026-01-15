@@ -1,13 +1,14 @@
+/* Legacy variable mappings - kept for backward compatibility */
+/* Main theme variables are defined in global.css */
 :root {
-  --primary-color: #667eea;
-  --secondary-color: #764ba2;
-  --accent-color: #f093fb;
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
-  --error-color: #ef4444;
-  --surface-color: rgba(255, 255, 255, 0.95);
-  --glass-color: rgba(255, 255, 255, 0.1);
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --border-color: rgba(255, 255, 255, 0.2);
+  /* Map legacy variables to new Linear-style variables */
+  --primary-color: var(--accent-primary);
+  --secondary-color: var(--accent-secondary);
+  --accent-color: var(--accent-primary-hover);
+  --success-color: var(--success);
+  --warning-color: var(--warning);
+  --error-color: var(--error);
+  --surface-color: var(--bg-secondary);
+  --glass-color: var(--bg-tertiary);
+  --border-color: var(--border-default);
 }

@@ -59,8 +59,10 @@ export const useThemeStore = defineStore('theme', () => {
 
     if (isDarkMode.value) {
       root.classList.add('dark')
+      root.classList.remove('light')
     } else {
       root.classList.remove('dark')
+      root.classList.add('light')
     }
   }
 

@@ -7,7 +7,7 @@
 /* Font Awesome 图标 */
 @import '@fortawesome/fontawesome-free/css/all.css';
 
-/* 全局样式 */
+/* 全局样式 - Linear style (flat, no gradients) */
 body {
   font-family:
     'Inter',
@@ -16,31 +16,15 @@ body {
     'Segoe UI',
     Roboto,
     sans-serif;
-  background: linear-gradient(
-    135deg,
-    var(--primary-color) 0%,
-    var(--secondary-color) 50%,
-    var(--accent-color) 100%
-  );
-  background-attachment: fixed;
+  background: var(--bg-primary);
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
 }
 
+/* No decorative gradients in Linear style */
 body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(circle at 20% 80%, rgba(240, 147, 251, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(102, 126, 234, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: -1;
+  display: none;
 }
 
 /* 通用transition - 仅应用于特定元素 */
@@ -65,22 +49,21 @@ h6 {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Element Plus 主题覆盖 */
+/* Element Plus 主题覆盖 - Linear style */
 .el-button--primary {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  background: var(--accent-primary);
   border-color: transparent;
 }
 
 .el-button--primary:hover,
 .el-button--primary:focus {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  opacity: 0.9;
+  background: var(--accent-primary-hover);
 }
 
-/* 自定义滚动条样式 */
+/* 自定义滚动条样式 - Linear style */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(102, 126, 234, 0.3) rgba(102, 126, 234, 0.05);
+  scrollbar-color: var(--border-strong) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -89,22 +72,16 @@ h6 {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(102, 126, 234, 0.05);
-  border-radius: 10px;
+  background: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%);
-  border-radius: 10px;
-  transition: background 0.3s ease;
+  background: var(--border-strong);
+  border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:active {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+  background: var(--text-muted);
 }
 
 /* Vue过渡动画 */
